@@ -5,10 +5,9 @@ import com.anish.todo_management.service.TodoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/todos")
@@ -26,5 +25,36 @@ public class TodoController {
 
         return new ResponseEntity<>(savedTodo, HttpStatus.CREATED);
     }
+
+    //Build GET todo REST API
+    @GetMapping("{id}")
+    public ResponseEntity<TodoDto> getTodo(@PathVariable("id") Long id){
+        TodoDto todoDto=todoService.getTodo(id);
+
+        return new ResponseEntity<>(todoDto,HttpStatus.OK);
+    }
+
+    //Build GET ALL todo REST API
+    @GetMapping
+    public ResponseEntity<List<TodoDto>> getAllTodos(){
+        List<TodoDto> todos=todoService.getAllTodos();
+        return new ResponseEntity<>(todos,HttpStatus.OK);
+    }
+
+    //Build UPDATE Todo REST API
+    @PutMapping("{id}")
+    public ResponseEntity<TodoDto> updateTodo(@RequestBody TodoDto todoDto,@PathVariable("id") Long id){
+        TodoDto updatedTodo=todoService.updateTodo(todoDto,id);
+        return ResponseEntity.ok(updatedTodo);
+
+    }
+
+    //Build DELETE Todo REST API
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteTodo(@PathVariable("id") Long id){
+        todoService.deleteTodo(id);
+        return ResponseEntity.ok("Todo Deleted Successfully");
+    }
+
 
 }
